@@ -44,10 +44,15 @@
     }
     .brand{display:flex; align-items:center; gap:12px; min-width:240px}
     .logo{
-      width:34px; height:34px; border-radius:10px;
-      background: linear-gradient(135deg, rgba(122,167,255,.95), rgba(78,229,159,.85));
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
+  width:70px;
+  height:40px;
+  border-radius:10px;
+  object-fit: contain;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line);
+  padding: 4px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
     .brand h1{font-size:16px; margin:0; font-weight:800; letter-spacing:.2px}
     .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
     .nav{display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end}
@@ -183,7 +188,7 @@
     <div class="wrap">
       <div class="inner">
         <div class="brand">
-          <div class="logo" aria-hidden="true"></div>
+          <img class="logo" src="assets/university-logo.png" alt="University logo">
           <div>
             <h1>SmartPlantMonitor</h1>
             <p>Robotics • Smart Greenhouse System • Riga 2025</p>
