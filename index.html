@@ -337,69 +337,65 @@
       </div>
     </section>
 
-    <!-- HARDWARE + PHOTOS -->
-    <section class="section" id="hardware">
-      <div class="grid">
-        <div class="card col-12">
-          <div class="pad">
-            <h3 class="sectionTitle">Hardware & photos</h3>
-            <p class="small">
-              Upload photos to <code class="chip" style="border-radius:10px">assets/</code> and reference them as
-              <code class="chip" style="border-radius:10px">assets/photo1.jpg</code>.
-            </p>
-            <div class="divider"></div>
+  <!-- HARDWARE + PHOTOS -->
+<section class="section" id="hardware">
+  <div class="grid">
+    <div class="card col-12">
+      <div class="pad">
+        <h3 class="sectionTitle">Hardware & photos</h3>
+        <p class="small">
+          Photos from the Smart Plant Monitor prototype.
+        </p>
 
-            <!-- Replace placeholders with your real photos -->
-            <div class="gallery" aria-label="Photo gallery">
-              <!-- Option 1: If you already uploaded images, uncomment img tags and remove placeholder blocks -->
+        <div class="divider"></div>
 
-              <!--
-              <div class="col-4"><img class="img" src="assets/prototype.jpg" alt="Prototype overview"></div>
-              <div class="col-4"><img class="img" src="assets/wiring.jpg" alt="Wiring and sensors"></div>
-              <div class="col-4"><img class="img" src="assets/display.jpg" alt="Status output on display"></div>
-              -->
+        <!-- Photo gallery -->
+        <div class="gallery" aria-label="Photo gallery">
+          <div class="col-4">
+            <img class="img" src="assets/prototype.jpg" alt="Prototype overview">
+          </div>
 
-              <div class="ph">
-                <b>Photo 1</b><br/>Prototype overview<br/>
-                <span style="opacity:.9;margin-top:6px;display:block;">assets/prototype.jpg</span>
-              </div>
-              <div class="ph">
-                <b>Photo 2</b><br/>Wiring / sensors<br/>
-                <span style="opacity:.9;margin-top:6px;display:block;">assets/wiring.jpg</span>
-              </div>
-              <div class="ph">
-                <b>Photo 3</b><br/>Display / output<br/>
-                <span style="opacity:.9;margin-top:6px;display:block;">assets/display.jpg</span>
-              </div>
-            </div>
+          <div class="col-4">
+            <img class="img" src="assets/wiring.jpg" alt="Wiring and sensors">
+          </div>
 
-            <div class="divider"></div>
-
-            <div class="grid">
-              <div class="col-6">
-                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Core components</h4>
-                <ul class="list">
-                  <li>Microcontroller board (Arduino / similar).</li>
-                  <li>Soil moisture sensor module.</li>
-                  <li>Temperature & humidity sensor (e.g., DHT22).</li>
-                  <li>Light sensor (LDR module).</li>
-                  <li>Display (OLED/LCD) + LEDs/buzzer (if used).</li>
-                </ul>
-              </div>
-              <div class="col-6">
-                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Notes</h4>
-                <ul class="list">
-                  <li>Calibration is required for accurate soil readings.</li>
-                  <li>Use stable power and clean wiring for reliable signals.</li>
-                  <li>Document pin mapping (helps during debugging).</li>
-                </ul>
-              </div>
-            </div>
-
+          <div class="col-4">
+            <img class="img" src="assets/display.jpg" alt="Status output on display">
           </div>
         </div>
+
+        <div class="divider"></div>
+
+        <div class="grid">
+          <div class="col-6">
+            <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">
+              Core components
+            </h4>
+            <ul class="list">
+              <li>Microcontroller board (Arduino / similar).</li>
+              <li>Soil moisture sensor.</li>
+              <li>Temperature & humidity sensor (DHT22).</li>
+              <li>Light sensor (LDR).</li>
+              <li>Display (LCD/OLED).</li>
+            </ul>
+          </div>
+
+          <div class="col-6">
+            <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">
+              Notes
+            </h4>
+            <ul class="list">
+              <li>Sensor calibration is required.</li>
+              <li>Stable power improves reliability.</li>
+              <li>Pin mapping should be documented.</li>
+            </ul>
+          </div>
+        </div>
+
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <!-- SOFTWARE -->
     <section class="section" id="software">
