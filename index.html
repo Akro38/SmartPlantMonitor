@@ -337,6 +337,34 @@
       </div>
     </section>
 
+    <!-- SYSTEM ARCHITECTURE -->
+<section class="section" id="architecture-diagram">
+  <div class="grid">
+    <div class="card col-12">
+      <div class="pad">
+        <h3 class="sectionTitle">System architecture</h3>
+        <p class="small">
+          Full hardware architecture of the Smart Plant Monitor system, including sensors,
+          controller, outputs and actuators.
+        </p>
+
+        <div class="divider"></div>
+
+        <img 
+          class="img" 
+          src="assets/architecture.png" 
+          alt="Smart Plant Monitor hardware architecture diagram"
+          style="max-width:100%; border-radius:16px;"
+        >
+
+        <p class="small" style="margin-top:10px;">
+          Sensors → Arduino UNO → decision logic → visual/audio alerts and actuators.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
   <!-- HARDWARE + PHOTOS -->
 <section class="section" id="hardware">
   <div class="grid">
@@ -348,6 +376,116 @@
         </p>
 
         <div class="divider"></div>
+
+        <!-- ARDUINO CODE -->
+<section class="section" id="arduino-code">
+  <div class="grid">
+    <div class="card col-12">
+      <div class="pad">
+        <h3 class="sectionTitle">Arduino control code</h3>
+        <p class="small">
+          Core firmware that reads sensors, applies decision logic, updates display,
+          and triggers alerts and actuators.
+        </p>
+
+        <div class="divider"></div>
+
+        <pre><code>
+// Smart Plant Monitor - Arduino Code
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <DHT.h>
+
+// -------- PIN DEFINITIONS --------
+#define LED_PIN 2
+#define BUZZER_PIN 3
+#define BUTTON_PIN 4
+#define LDR_PIN 5
+#define DHT_PIN 6
+#define MOTOR_PIN 7
+#define TRIG_PIN 8
+#define ECHO_PIN 9
+
+#define GREEN_LED 10
+#define YELLOW_LED 11
+#define RED_LED 12
+
+// -------- DHT --------
+#define DHTTYPE DHT11
+DHT dht(DHT_PIN, DHTTYPE);
+
+// -------- LCD --------
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// -------- SETTINGS --------
+#define TEMP_MILD 30
+#define TEMP_HIGH 35
+#define HUM_MILD 40
+#define HUM_LOW 30
+#define DIST_LIMIT 20
+
+// -------- VARIABLES --------
+int problemLevel = 0;
+
+// -------- FUNCTIONS --------
+long readDistanceCM() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  long duration = pulseIn(ECHO_PIN, HIGH, 30000);
+  if (duration == 0) return -1;
+  return duration * 0.034 / 2;
+}
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+  dht.begin();
+  lcd.init();
+  lcd.backlight();
+
+  lcd.print("Greenhouse Sys");
+  delay(2000);
+  lcd.clear();
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+  long distance = readDistanceCM();
+
+  // Decision logic
+  if (distance > 0 && distance < DIST_LIMIT) {
+    problemLevel = 2;
+  } else if (temp > TEMP_HIGH || hum < HUM_LOW) {
+    problemLevel = 1;
+  } else {
+    problemLevel = 0;
+  }
+}
+        </code></pre>
+
+        <p class="small" style="margin-top:10px;">
+          The code implements threshold-based decision logic with multiple sensor inputs
+          and output channels.
+        </p>
+
+    <ul class="list">
+  <li>Sensors are read continuously in the main loop.</li>
+  <li>Values are compared against predefined thresholds.</li>
+  <li>System state is reflected via LEDs, LCD, buzzer and relay.</li>
+</ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
         <!-- Photo gallery -->
         <div class="gallery" aria-label="Photo gallery">
