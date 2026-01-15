@@ -147,6 +147,34 @@
       .nav{display:none}
       .ph{grid-column: span 12}
     }
+    /* ===== WOKWI BUTTON ===== */
+.wokwi-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #3aa0ff, #5b7cff, #38d39f);
+  background-size: 200% 200%;
+  animation: gradientFlow 4s ease infinite;
+  box-shadow: 0 10px 30px rgba(58,160,255,.35);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.wokwi-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(58,160,255,.45);
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
   </style>
 </head>
 
@@ -534,6 +562,42 @@ void loop() {
     </div>
   </div>
 </section>
+
+    <!-- WOKWI SIMULATION -->
+<section class="section" id="simulation">
+  <div class="grid">
+    <div class="card col-12">
+      <div class="pad">
+        <h3 class="sectionTitle">Wokwi Simulation</h3>
+
+        <p class="small">
+          Interactive simulation of the Smart Plant Monitor system.
+          You can view the full wiring diagram and run the Arduino code online.
+        </p>
+
+        <div class="divider"></div>
+
+        <div style="display:flex;justify-content:center;margin-top:20px;">
+          <a
+            href="https://wokwi.com/projects/446952342189061121"
+            target="_blank"
+            class="wokwi-btn"
+            aria-label="Open Wokwi Simulation"
+          >
+            ▶ Open Wokwi Simulation
+          </a>
+        </div>
+
+        <p class="small" style="text-align:center;margin-top:12px;opacity:.8;">
+          Opens in a new tab • Live circuit + firmware
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+    
 
     <!-- SOFTWARE -->
     <section class="section" id="software">
