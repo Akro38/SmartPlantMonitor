@@ -3,323 +3,281 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SmartPlantMonitor — Project Presentation</title>
-  <meta name="description" content="SmartPlantMonitor project presentation: system analysis, hardware, software, ROI and results." />
+  <title>SmartPlantMonitor — Smart Greenhouse (Robotics)</title>
+  <meta name="description" content="Robotics project: Smart Greenhouse monitoring system (SmartPlantMonitor). Sensors, control logic, alerts, and results." />
+
   <style>
     :root{
       --bg:#0b1220;
       --panel:#0f1a2f;
       --panel2:#0c162a;
-      --text:#e8eefc;
-      --muted:#a9b6d6;
       --line:rgba(255,255,255,.10);
-      --accent:#5aa7ff;
-      --accent2:#7cf7d0;
-      --shadow: 0 18px 60px rgba(0,0,0,.35);
-      --radius: 18px;
-      --max: 1100px;
+      --text:#e7eefc;
+      --muted:#9ab0d6;
+      --accent:#7aa7ff;
+      --accent2:#4ee59f;
+      --shadow:0 18px 48px rgba(0,0,0,.45);
+      --radius:18px;
+      --max:1120px;
     }
-    *{ box-sizing:border-box; }
-    html{ scroll-behavior:smooth; }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 600px at 20% -10%, rgba(90,167,255,.18), transparent 60%),
-                  radial-gradient(900px 500px at 90% 10%, rgba(124,247,208,.12), transparent 55%),
-                  var(--bg);
-      color:var(--text);
-      line-height:1.55;
+      margin:0; color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 500px at 15% -10%, rgba(122,167,255,.22), transparent 55%),
+        radial-gradient(900px 500px at 85% 0%, rgba(78,229,159,.15), transparent 55%),
+        radial-gradient(900px 600px at 50% 120%, rgba(122,167,255,.10), transparent 60%),
+        var(--bg);
     }
-    a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:var(--max); margin:0 auto; padding: 28px 18px; }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 22px}
     .topbar{
-      position: sticky; top:0; z-index:100;
+      position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
-      background: rgba(11,18,32,.72);
-      border-bottom: 1px solid var(--line);
+      background: rgba(11,18,32,.70);
+      border-bottom:1px solid var(--line);
     }
     .topbar .inner{
-      max-width:var(--max); margin:0 auto; padding: 12px 18px;
-      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      height:70px; display:flex; align-items:center; justify-content:space-between; gap:16px;
     }
-    .brand{
-      display:flex; align-items:center; gap:10px; min-width: 220px;
-    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:240px}
     .logo{
-      width:36px; height:36px; border-radius:12px;
-      background: linear-gradient(135deg, rgba(90,167,255,.95), rgba(124,247,208,.85));
-      box-shadow: 0 10px 30px rgba(90,167,255,.22);
+      width:34px; height:34px; border-radius:10px;
+      background: linear-gradient(135deg, rgba(122,167,255,.95), rgba(78,229,159,.85));
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
     }
-    .brand h1{ margin:0; font-size:15px; letter-spacing:.2px; }
-    .brand p{ margin:0; font-size:12px; color:var(--muted); }
-    .nav{
-      display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end;
-    }
+    .brand h1{font-size:16px; margin:0; font-weight:800; letter-spacing:.2px}
+    .brand p{margin:2px 0 0; font-size:12px; color:var(--muted)}
+    .nav{display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end}
     .nav a{
       font-size:13px; color:var(--muted);
       padding:8px 10px; border-radius:12px;
-      border: 1px solid transparent;
+      border:1px solid transparent;
     }
-    .nav a:hover{
-      color:var(--text);
-      border-color: var(--line);
-      background: rgba(255,255,255,.03);
-    }
-
+    .nav a:hover{color:var(--text); border-color:var(--line); background:rgba(255,255,255,.03)}
     .hero{
-      padding: 34px 0 18px;
-      display:grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap:18px;
-      align-items:stretch;
+      padding:34px 0 10px;
     }
-    @media (max-width: 900px){
-      .hero{ grid-template-columns:1fr; }
-      .brand{ min-width: auto; }
-    }
+    .grid{display:grid; grid-template-columns:repeat(12, 1fr); gap:18px}
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
       box-shadow: var(--shadow);
-      overflow:hidden;
     }
-    .card .pad{ padding: 18px; }
-    .kicker{
-      display:inline-flex; gap:10px; align-items:center;
-      padding: 7px 10px; border-radius: 999px;
-      border: 1px solid rgba(90,167,255,.25);
-      background: rgba(90,167,255,.08);
-      color: var(--text);
-      font-size: 12px;
-    }
-    .kdot{
-      width:8px; height:8px; border-radius:999px;
-      background: var(--accent2);
-      box-shadow: 0 0 0 6px rgba(124,247,208,.12);
-    }
-    .title{
-      margin: 12px 0 8px;
-      font-size: 34px;
-      letter-spacing: -.3px;
-      line-height:1.1;
-    }
-    .subtitle{ margin:0; color:var(--muted); font-size:14px; max-width: 70ch; }
-    .meta{
-      margin-top: 14px;
-      display:flex; gap:10px; flex-wrap:wrap;
-    }
+    .pad{padding:20px}
+    .col-7{grid-column: span 7}
+    .col-5{grid-column: span 5}
+    .col-12{grid-column: span 12}
+    .col-4{grid-column: span 4}
+    .col-6{grid-column: span 6}
     .pill{
+      display:inline-flex; align-items:center; gap:8px;
       font-size:12px; color:var(--muted);
-      padding:7px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      padding:7px 10px; border-radius:999px;
     }
-    .ctaRow{ margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; }
+    .dot{width:8px; height:8px; border-radius:999px; background:var(--accent2); box-shadow:0 0 0 4px rgba(78,229,159,.12)}
+    .hTitle{font-size:44px; line-height:1.05; margin:12px 0 10px; letter-spacing:-.6px}
+    .lead{color:var(--muted); font-size:15px; line-height:1.6; margin:0}
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+    .chip{
+      font-size:12px; color:var(--muted);
+      border:1px solid var(--line);
+      padding:7px 10px; border-radius:999px;
+      background:rgba(255,255,255,.02);
+    }
+    .ctaRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px}
     .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      padding:10px 12px; border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      font-size: 13px;
-      cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 12px; border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text); font-size:13px;
     }
     .btn.primary{
-      border-color: rgba(90,167,255,.35);
-      background: linear-gradient(135deg, rgba(90,167,255,.22), rgba(124,247,208,.14));
+      background: linear-gradient(135deg, rgba(122,167,255,.25), rgba(78,229,159,.18));
+      border-color: rgba(122,167,255,.35);
     }
-    .btn:hover{ transform: translateY(-1px); }
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .col-4{ grid-column: span 4; }
-    .col-6{ grid-column: span 6; }
-    .col-8{ grid-column: span 8; }
-    .col-12{ grid-column: span 12; }
-    @media (max-width: 900px){
-      .col-4,.col-6,.col-8{ grid-column: span 12; }
-    }
-    .sectionTitle{
-      margin:0 0 6px;
-      font-size: 20px;
-      letter-spacing: -.2px;
-    }
-    .small{ color:var(--muted); margin:0; font-size:13px; }
-    .list{ margin:10px 0 0; padding-left: 18px; color: var(--muted); }
-    .list li{ margin:6px 0; }
-    .tag{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:7px 10px; border-radius: 999px;
-      border: 1px solid rgba(124,247,208,.22);
-      background: rgba(124,247,208,.06);
-      color: var(--text);
-      font-size: 12px;
-      margin-right: 8px; margin-top: 8px;
-    }
-    .divider{ height:1px; background: var(--line); margin: 16px 0; }
-    .table{
-      width:100%; border-collapse: collapse;
-      overflow:hidden;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-    }
-    .table th,.table td{
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
-      font-size: 13px;
-    }
-    .table th{ text-align:left; color: var(--muted); font-weight:600; background: rgba(255,255,255,.03); }
-    .table tr:last-child td{ border-bottom:none; }
-    .muted{ color:var(--muted); }
+    .section{padding:18px 0}
+    .sectionTitle{font-size:18px; margin:0 0 8px; font-weight:800}
+    .divider{height:1px; background:var(--line); margin:14px 0}
+    .small{color:var(--muted); font-size:13px; line-height:1.6; margin:0}
+    .list{margin:10px 0 0; padding-left:18px; color:var(--muted); line-height:1.7; font-size:13px}
+    .table{width:100%; border-collapse:collapse; overflow:hidden; border-radius:14px}
+    .table th,.table td{padding:10px 12px; border-bottom:1px solid var(--line); font-size:13px}
+    .table th{color:var(--text); text-align:left; font-weight:700; width:44%}
+    .table td{color:var(--muted)}
     .gallery{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      display:grid; grid-template-columns:repeat(12,1fr); gap:12px;
     }
-    @media (max-width: 900px){
-      .gallery{ grid-template-columns: 1fr; }
+    .ph{
+      grid-column: span 4;
+      border-radius:16px;
+      border:1px dashed rgba(255,255,255,.20);
+      background:rgba(255,255,255,.03);
+      padding:12px;
+      min-height:190px;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      text-align:center; color:var(--muted); font-size:12px;
     }
-    .photo{
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      overflow:hidden;
+    .img{
+      width:100%; border-radius:16px; border:1px solid var(--line);
+      display:block; background:rgba(255,255,255,.03);
     }
-    .photo img{ width:100%; height: 220px; object-fit: cover; display:block; }
-    .photo .cap{ padding: 10px 12px; font-size: 12px; color: var(--muted); }
     .footer{
-      padding: 24px 0 36px;
-      color: var(--muted);
-      font-size: 12px;
+      margin:28px 0 34px;
+      color:var(--muted); font-size:12px;
       text-align:center;
     }
-    code.inline{
-      padding: 2px 6px; border-radius: 8px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      font-size: 12px;
+    .note{
+      border-left:3px solid rgba(122,167,255,.55);
+      padding:10px 12px;
+      background:rgba(122,167,255,.08);
+      border-radius:12px;
+      color:var(--muted);
+      font-size:13px; line-height:1.6;
+    }
+    @media (max-width: 980px){
+      .col-7,.col-5,.col-6,.col-4{grid-column: span 12}
+      .hTitle{font-size:36px}
+      .nav{display:none}
+      .ph{grid-column: span 12}
     }
   </style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="inner">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1>SmartPlantMonitor</h1>
-          <p>Systems Theory & System Analysis • Riga 2025</p>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="inner">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1>SmartPlantMonitor</h1>
+            <p>Robotics • Smart Greenhouse System • Riga 2025</p>
+          </div>
         </div>
+
+        <nav class="nav" aria-label="Navigation">
+          <a href="#overview">Overview</a>
+          <a href="#problem">Problem</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#hardware">Hardware</a>
+          <a href="#software">Software</a>
+          <a href="#testing">Testing</a>
+          <a href="#results">Results</a>
+          <a href="#files">Files</a>
+        </nav>
       </div>
-      <nav class="nav" aria-label="Navigation">
-        <a href="#overview">Overview</a>
-        <a href="#problem">Problem</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#hardware">Hardware</a>
-        <a href="#software">Software</a>
-        <a href="#roi">ROI</a>
-        <a href="#results">Results</a>
-        <a href="#timeline">Timeline</a>
-        <a href="#files">Files</a>
-      </nav>
     </div>
-  </div>
+  </header>
 
   <main class="wrap">
-    <!-- HERO -->
-    <section class="hero" id="overview">
-      <div class="card">
-        <div class="pad">
-          <div class="kicker"><span class="kdot"></span>Project presentation / demo-ready</div>
-          <h2 class="title">Smart Plant Monitor</h2>
-          <p class="subtitle">
-            A smart monitoring system for plants that collects environmental and soil data, visualizes status,
-            and supports decision-making (alerts, thresholds, maintenance logic). Built as an educational IoT + systems analysis project.
-          </p>
+    <!-- HERO / OVERVIEW -->
+    <section class="hero section" id="overview">
+      <div class="grid">
+        <div class="card col-7">
+          <div class="pad">
+            <span class="pill"><span class="dot"></span> Project presentation • demo-ready</span>
+            <h2 class="hTitle">Smart Plant Monitor</h2>
+            <p class="lead">
+              A smart greenhouse / plant-care monitoring system that measures environmental and soil parameters,
+              applies threshold-based logic, and helps prevent typical plant failures (overwatering, dryness, low light).
+            </p>
 
-          <div class="meta">
-            <span class="pill">Arduino / Microcontroller</span>
-            <span class="pill">Sensors + Dashboard</span>
-            <span class="pill">System Analysis + ROI logic</span>
-            <span class="pill">GitHub Pages presentation</span>
-          </div>
+            <div class="chips" aria-label="Key tags">
+              <span class="chip">Arduino / Microcontroller</span>
+              <span class="chip">Sensors (soil + environment)</span>
+              <span class="chip">Threshold logic + alerts</span>
+              <span class="chip">Prototype & documentation</span>
+            </div>
 
-          <div class="ctaRow">
-            <a class="btn primary" href="#results">View results</a>
-            <a class="btn" href="#roi">ROI / value model</a>
-            <a class="btn" href="#files">Repository files</a>
-          </div>
+            <div class="ctaRow">
+              <a class="btn primary" href="#results">View results</a>
+              <a class="btn" href="#hardware">Hardware</a>
+              <a class="btn" href="#software">Software logic</a>
+            </div>
 
-          <div class="divider"></div>
-
-          <div>
-            <span class="tag">Key idea: turn data into decisions</span>
-            <span class="tag">Focus: stability, reliability, usability</span>
+            <div class="divider"></div>
+            <p class="small"><b>Key idea:</b> turn sensor data into clear decisions (OK / Warning / Critical) and keep plant care stable.</p>
           </div>
         </div>
-      </div>
 
-      <div class="card">
-        <div class="pad">
-          <h3 class="sectionTitle">Project Card</h3>
-          <p class="small">
-            <b>Course:</b> Systems Theory and System Analysis (ISMA)<br/>
-            <b>Location:</b> Riga • 2025<br/>
-            <b>Student:</b> Akro38 (replace with your name)<br/>
-            <b>Repo:</b> <span class="muted">SmartPlantMonitor</span>
-          </p>
+        <div class="card col-5">
+          <div class="pad">
+            <h3 class="sectionTitle">Project Card</h3>
+            <table class="table" aria-label="Project card">
+              <tbody>
+                <tr><th>Course</th><td>Robotics</td></tr>
+                <tr><th>Topic</th><td>Smart Greenhouse / Plant Monitoring System</td></tr>
+                <tr><th>Group</th><td>4232</td></tr>
+                <tr><th>Team</th><td>Nikita Petkuns, Anastasija Vostrikova</td></tr>
+                <tr><th>Location</th><td>Riga • 2025</td></tr>
+                <tr><th>Repo</th><td>SmartPlantMonitor</td></tr>
+              </tbody>
+            </table>
 
-          <div class="divider"></div>
+            <div class="divider"></div>
+            <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Goals</h4>
+            <ul class="list">
+              <li>Monitor soil moisture and basic environment conditions.</li>
+              <li>Detect abnormal states using thresholds and rules.</li>
+              <li>Provide clear output (display / LED / alerts).</li>
+              <li>Document the system (architecture + testing).</li>
+            </ul>
+          </div>
+        </div>
 
-          <h3 class="sectionTitle">Goals</h3>
-          <ul class="list">
-            <li>Monitor plant condition using sensors (soil + environment).</li>
-            <li>Detect abnormal states using thresholds and rules.</li>
-            <li>Provide clear status output (display/logging/dashboard).</li>
-            <li>Justify value creation using ROI / company-value approach (course method).</li>
-          </ul>
+        <div class="card col-12">
+          <div class="pad">
+            <h3 class="sectionTitle">Quick summary</h3>
+            <p class="small">
+              SmartPlantMonitor is designed as a practical robotics prototype: sensors → microcontroller → decision logic → user feedback.
+              The project focuses on reliability, clarity of status, and evidence-based testing.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- PROBLEM -->
-    <section class="grid" id="problem">
-      <div class="card col-12">
-        <div class="pad">
-          <h3 class="sectionTitle">Problem statement</h3>
-          <p class="small">
-            Plant care is often reactive: people notice problems too late (overwatering, dryness, low light).
-            The system should continuously collect data, reduce uncertainty, and support timely decisions.
-          </p>
+    <section class="section" id="problem">
+      <div class="grid">
+        <div class="card col-12">
+          <div class="pad">
+            <h3 class="sectionTitle">Problem statement</h3>
+            <p class="small">
+              Plant care is often reactive: problems are noticed too late (dry soil, overheating, insufficient light).
+              A smart greenhouse monitor should collect data continuously, reduce uncertainty, and support timely decisions.
+            </p>
+            <div class="divider"></div>
 
-          <div class="divider"></div>
-
-          <div class="grid">
-            <div class="col-6">
-              <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">System contradictions (from systems analysis)</h4>
-              <ul class="list">
-                <li><b>Need more control</b> vs <b>limited attention</b> of the user.</li>
-                <li><b>Better accuracy</b> vs <b>cost and complexity</b> of sensors.</li>
-                <li><b>Continuous monitoring</b> vs <b>energy / maintenance constraints</b>.</li>
-                <li><b>More data</b> vs <b>need for simple interpretation</b> (clear status, alerts).</li>
-              </ul>
+            <div class="grid">
+              <div class="col-6">
+                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Main problems</h4>
+                <ul class="list">
+                  <li>Inconsistent watering and missed routines.</li>
+                  <li>Environment changes (temperature / humidity) not tracked.</li>
+                  <li>No clear criteria when intervention is needed.</li>
+                </ul>
+              </div>
+              <div class="col-6">
+                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">System contradictions</h4>
+                <ul class="list">
+                  <li>Need more control <b>vs</b> limited attention of the user.</li>
+                  <li>Better accuracy <b>vs</b> higher cost/complexity of sensors.</li>
+                  <li>More automation <b>vs</b> safety and predictability.</li>
+                </ul>
+              </div>
             </div>
-            <div class="col-6">
-              <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Scope & assumptions</h4>
-              <ul class="list">
-                <li>Educational prototype with realistic architecture.</li>
-                <li>Threshold-based logic with future upgrade path to ML.</li>
-                <li>Focus on reliability, readability, and reproducibility.</li>
-                <li>All results documented and reproducible from repository.</li>
-              </ul>
+
+            <div class="divider"></div>
+            <div class="note">
+              <b>Solution approach:</b> use threshold-based logic (simple, transparent, testable) and improve later with calibration and data logging.
             </div>
           </div>
         </div>
@@ -327,310 +285,288 @@
     </section>
 
     <!-- ARCHITECTURE -->
-    <section class="grid" id="architecture">
-      <div class="card col-8">
-        <div class="pad">
-          <h3 class="sectionTitle">System architecture</h3>
-          <p class="small">
-            Data flow: sensors → microcontroller → processing (rules/thresholds) → output (display/log/dashboard) → user decision.
-          </p>
-          <div class="divider"></div>
-          <table class="table" aria-label="Architecture table">
-            <thead>
-              <tr><th>Layer</th><th>Role</th><th>Examples in this project</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Sensing</b></td>
-                <td class="muted">Collect raw signals</td>
-                <td class="muted">Temperature/Humidity, Light, Soil moisture, etc.</td>
-              </tr>
-              <tr>
-                <td><b>Processing</b></td>
-                <td class="muted">Convert signals into indicators</td>
-                <td class="muted">Filtering, calibration, thresholds, state machine</td>
-              </tr>
-              <tr>
-                <td><b>Decision support</b></td>
-                <td class="muted">Interpret indicators</td>
-                <td class="muted">OK / Warning / Critical + recommendations</td>
-              </tr>
-              <tr>
-                <td><b>Output</b></td>
-                <td class="muted">Show status to user</td>
-                <td class="muted">OLED/LCD, Serial log, optional web dashboard</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <section class="section" id="architecture">
+      <div class="grid">
+        <div class="card col-12">
+          <div class="pad">
+            <h3 class="sectionTitle">System architecture</h3>
+            <p class="small">High-level flow: <b>Sensors → Controller → Rules → Output</b>.</p>
+            <div class="divider"></div>
 
-      <div class="card col-4">
-        <div class="pad">
-          <h3 class="sectionTitle">Key metrics</h3>
-          <p class="small">Indicators used to evaluate the system and demonstrate value.</p>
-          <ul class="list">
-            <li>Detection accuracy (events captured)</li>
-            <li>Time to detect abnormal state</li>
-            <li>System uptime / stability</li>
-            <li>User effort reduction</li>
-          </ul>
-          <div class="divider"></div>
-          <p class="small">
-            Implementation note: start with rule-based logic, then improve using better sensors and calibration.
-          </p>
+            <div class="grid">
+              <div class="card col-6" style="background:rgba(255,255,255,.03); box-shadow:none;">
+                <div class="pad">
+                  <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Inputs (sensors)</h4>
+                  <ul class="list">
+                    <li>Soil moisture sensor (watering decision).</li>
+                    <li>Temperature & humidity sensor (environment stability).</li>
+                    <li>Light sensor (low light detection).</li>
+                    <li>(Optional) Gas / motion / additional modules if used.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card col-6" style="background:rgba(255,255,255,.03); box-shadow:none;">
+                <div class="pad">
+                  <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Outputs (feedback)</h4>
+                  <ul class="list">
+                    <li>Display status (OK / Warning / Critical + values).</li>
+                    <li>LED indicators / buzzer alerts.</li>
+                    <li>(Optional) Relay for pump/fan/lighting.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card col-12" style="background:rgba(255,255,255,.03); box-shadow:none;">
+                <div class="pad">
+                  <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Decision logic</h4>
+                  <p class="small">
+                    Read sensors → filter/noise reduction → compare to thresholds → assign status →
+                    show on display + trigger alerts/actions.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+            <p class="small">
+              If you want, we can add a simple block diagram image later (PNG) and place it here.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- HARDWARE -->
-    <section class="grid" id="hardware">
-      <div class="card col-12">
-        <div class="pad">
-          <h3 class="sectionTitle">Hardware</h3>
-          <p class="small">
-            Below is a typical set. Replace items with your exact components (pins, models).
-          </p>
-          <div class="divider"></div>
+    <!-- HARDWARE + PHOTOS -->
+    <section class="section" id="hardware">
+      <div class="grid">
+        <div class="card col-12">
+          <div class="pad">
+            <h3 class="sectionTitle">Hardware & photos</h3>
+            <p class="small">
+              Upload photos to <code class="chip" style="border-radius:10px">assets/</code> and reference them as
+              <code class="chip" style="border-radius:10px">assets/photo1.jpg</code>.
+            </p>
+            <div class="divider"></div>
 
-          <div class="grid">
-            <div class="col-6">
-              <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Components</h4>
-              <ul class="list">
-                <li>Microcontroller: Arduino Uno / Nano (or equivalent)</li>
-                <li>Display: OLED 128×64 (I2C) / LCD 1602</li>
-                <li>Soil moisture sensor</li>
-                <li>Light sensor (LDR)</li>
-                <li>Temperature/Humidity (e.g., DHT22)</li>
-                <li>Optional: relay, buzzer, button, PIR</li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Wiring logic</h4>
-              <ul class="list">
-                <li>Sensors connected to analog/digital pins</li>
-                <li>I2C display: SDA/SCL</li>
-                <li>Power: stable 5V (avoid noise)</li>
-                <li>Calibration recommended for moisture and light</li>
-              </ul>
-              <p class="small">
-                Tip: document pins in <code class="inline">README</code> or a table for reproducibility.
-              </p>
-            </div>
-          </div>
+            <!-- Replace placeholders with your real photos -->
+            <div class="gallery" aria-label="Photo gallery">
+              <!-- Option 1: If you already uploaded images, uncomment img tags and remove placeholder blocks -->
 
-          <div class="divider"></div>
+              <!--
+              <div class="col-4"><img class="img" src="assets/prototype.jpg" alt="Prototype overview"></div>
+              <div class="col-4"><img class="img" src="assets/wiring.jpg" alt="Wiring and sensors"></div>
+              <div class="col-4"><img class="img" src="assets/display.jpg" alt="Status output on display"></div>
+              -->
 
-          <h4 class="sectionTitle" style="font-size:16px;margin:0 0 10px;">Photos</h4>
-          <div class="gallery">
-            <div class="photo">
-              <img src="assets/photo1.jpg" alt="SmartPlantMonitor setup photo 1" onerror="this.style.display='none'; this.parentElement.querySelector('.cap').innerText='Add assets/photo1.jpg';" />
-              <div class="cap">Add <b>assets/photo1.jpg</b> (overview)</div>
+              <div class="ph">
+                <b>Photo 1</b><br/>Prototype overview<br/>
+                <span style="opacity:.9;margin-top:6px;display:block;">assets/prototype.jpg</span>
+              </div>
+              <div class="ph">
+                <b>Photo 2</b><br/>Wiring / sensors<br/>
+                <span style="opacity:.9;margin-top:6px;display:block;">assets/wiring.jpg</span>
+              </div>
+              <div class="ph">
+                <b>Photo 3</b><br/>Display / output<br/>
+                <span style="opacity:.9;margin-top:6px;display:block;">assets/display.jpg</span>
+              </div>
             </div>
-            <div class="photo">
-              <img src="assets/photo2.jpg" alt="SmartPlantMonitor wiring photo" onerror="this.style.display='none'; this.parentElement.querySelector('.cap').innerText='Add assets/photo2.jpg';" />
-              <div class="cap">Add <b>assets/photo2.jpg</b> (wiring)</div>
+
+            <div class="divider"></div>
+
+            <div class="grid">
+              <div class="col-6">
+                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Core components</h4>
+                <ul class="list">
+                  <li>Microcontroller board (Arduino / similar).</li>
+                  <li>Soil moisture sensor module.</li>
+                  <li>Temperature & humidity sensor (e.g., DHT22).</li>
+                  <li>Light sensor (LDR module).</li>
+                  <li>Display (OLED/LCD) + LEDs/buzzer (if used).</li>
+                </ul>
+              </div>
+              <div class="col-6">
+                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Notes</h4>
+                <ul class="list">
+                  <li>Calibration is required for accurate soil readings.</li>
+                  <li>Use stable power and clean wiring for reliable signals.</li>
+                  <li>Document pin mapping (helps during debugging).</li>
+                </ul>
+              </div>
             </div>
-            <div class="photo">
-              <img src="assets/photo3.jpg" alt="SmartPlantMonitor display output" onerror="this.style.display='none'; this.parentElement.querySelector('.cap').innerText='Add assets/photo3.jpg';" />
-              <div class="cap">Add <b>assets/photo3.jpg</b> (display)</div>
-            </div>
+
           </div>
         </div>
       </div>
     </section>
 
     <!-- SOFTWARE -->
-    <section class="grid" id="software">
-      <div class="card col-12">
-        <div class="pad">
-          <h3 class="sectionTitle">Software</h3>
-          <p class="small">
-            Control logic is implemented as a data-processing pipeline: read → filter → classify → output.
-          </p>
+    <section class="section" id="software">
+      <div class="grid">
+        <div class="card col-12">
+          <div class="pad">
+            <h3 class="sectionTitle">Software logic</h3>
+            <p class="small">
+              The system works as a cyclic controller: read → evaluate → output.
+              Threshold logic is transparent and easy to test.
+            </p>
 
-          <div class="divider"></div>
+            <div class="divider"></div>
 
-          <div class="grid">
-            <div class="col-6">
-              <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Core features</h4>
-              <ul class="list">
-                <li>Sensor sampling (interval-based)</li>
-                <li>Threshold rules (OK / Warning / Critical)</li>
-                <li>Display status + simple recommendations</li>
-                <li>Optional alerts (buzzer / LED)</li>
-              </ul>
+            <div class="grid">
+              <div class="col-6">
+                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Algorithm (simplified)</h4>
+                <ol class="list">
+                  <li>Read soil moisture, temperature/humidity, light.</li>
+                  <li>Filter noise (moving average / debounce if needed).</li>
+                  <li>Compare against thresholds.</li>
+                  <li>Assign status: OK / Warning / Critical.</li>
+                  <li>Display values + status, trigger alerts/actions.</li>
+                </ol>
+              </div>
+              <div class="col-6">
+                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Example statuses</h4>
+                <table class="table" aria-label="Status table">
+                  <tbody>
+                    <tr><th>OK</th><td>All parameters within target range</td></tr>
+                    <tr><th>Warning</th><td>Approaching limit (user attention recommended)</td></tr>
+                    <tr><th>Critical</th><td>Out of range (alert / intervention needed)</td></tr>
+                  </tbody>
+                </table>
+                <p class="small" style="margin-top:10px;">
+                  Tip: keep thresholds and messages in one place to simplify tuning.
+                </p>
+              </div>
             </div>
-            <div class="col-6">
-              <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Quality attributes</h4>
-              <ul class="list">
-                <li>Stability: no freezes, safe defaults</li>
-                <li>Maintainability: readable code, constants, modules</li>
-                <li>Reproducibility: same inputs → same outputs</li>
-                <li>Extensibility: new sensors can be added easily</li>
-              </ul>
-            </div>
+
+            <div class="divider"></div>
+            <p class="small">
+              If you want: we can add a short code snippet section and link to your Arduino sketch folder.
+            </p>
           </div>
-
-          <div class="divider"></div>
-
-          <p class="small">
-            Add your code link here: <b>Repo → /src or .ino file</b>.  
-            If you want, I’ll format a clean “Software” section exactly under your current sketch and components.
-          </p>
         </div>
       </div>
     </section>
 
-    <!-- ROI -->
-    <section class="grid" id="roi">
-      <div class="card col-12">
-        <div class="pad">
-          <h3 class="sectionTitle">ROI / Value justification (course method)</h3>
-          <p class="small">
-            In Systems Analysis, value is linked to measurable outputs: cost reduction, time saving, risk reduction.
-            For the financial task above we applied a capitalization-based value approach.
-          </p>
+    <!-- TESTING -->
+    <section class="section" id="testing">
+      <div class="grid">
+        <div class="card col-12">
+          <div class="pad">
+            <h3 class="sectionTitle">Testing</h3>
+            <p class="small">Short, evidence-based testing makes the project look professional.</p>
+            <div class="divider"></div>
 
-          <div class="divider"></div>
-
-          <div class="grid">
-            <div class="col-6">
-              <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Company Value calculation summary</h4>
-              <table class="table" aria-label="ROI summary">
-                <tbody>
-                  <tr><th>Sales</th><td>85,000</td></tr>
-                  <tr><th>Variable Costs</th><td>48,500</td></tr>
-                  <tr><th>Fixed Costs (Staff)</th><td>20,500</td></tr>
-                  <tr><th>Other Fixed Costs</th><td>2,600</td></tr>
-                  <tr><th>Amortization</th><td>8,000</td></tr>
-                  <tr><th>Interest</th><td>2,500</td></tr>
-                  <tr><th>Cap rate</th><td>0.1566</td></tr>
-                  <tr><th><b>Company Value (result)</b></th><td><b>≈ 17,018.52</b></td></tr>
-                </tbody>
-              </table>
-              <p class="small" style="margin-top:10px;">
-                This demonstrates how operational efficiency and risk level (cap rate) affect estimated value.
-              </p>
+            <div class="grid">
+              <div class="col-6">
+                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Test cases</h4>
+                <ul class="list">
+                  <li>Dry soil → system shows Warning/Critical.</li>
+                  <li>Moist soil → system returns to OK.</li>
+                  <li>Low light → warning shown on display.</li>
+                  <li>Sensor disconnection → safe handling / clear message.</li>
+                </ul>
+              </div>
+              <div class="col-6">
+                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Metrics</h4>
+                <ul class="list">
+                  <li>Stability of readings (no random jumps).</li>
+                  <li>Reaction time to changes.</li>
+                  <li>Correct threshold behavior.</li>
+                  <li>Usability of messages (clear actions).</li>
+                </ul>
+              </div>
             </div>
 
-            <div class="col-6">
-              <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">How SmartPlantMonitor creates value</h4>
-              <ul class="list">
-                <li>Prevents losses (plant replacement, time, wasted water).</li>
-                <li>Reduces uncertainty: decisions based on data, not guesswork.</li>
-                <li>Improves process stability (regular monitoring).</li>
-                <li>Creates scalable logic: same approach works for multiple plants / small greenhouse.</li>
-              </ul>
-              <p class="small" style="margin-top:10px;">
-                If you want, we can add a mini ROI example: <b>savings per month</b> vs <b>device cost</b>.
-              </p>
-            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- RESULTS -->
-    <section class="grid" id="results">
-      <div class="card col-12">
-        <div class="pad">
-          <h3 class="sectionTitle">Results</h3>
-          <p class="small">
-            Final state: working prototype, documented logic, clear presentation, and value justification.
-          </p>
-          <div class="divider"></div>
-          <div class="grid">
-            <div class="card col-4" style="background:rgba(255,255,255,.03); box-shadow:none;">
-              <div class="pad">
-                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">What works</h4>
-                <ul class="list">
-                  <li>Stable sensor polling</li>
-                  <li>Status output on display</li>
-                  <li>Threshold-based alerts</li>
-                </ul>
+    <section class="section" id="results">
+      <div class="grid">
+        <div class="card col-12">
+          <div class="pad">
+            <h3 class="sectionTitle">Results</h3>
+            <p class="small">Final state: working prototype, documented logic, clear presentation, and testable behavior.</p>
+            <div class="divider"></div>
+
+            <div class="grid">
+              <div class="card col-4" style="background:rgba(255,255,255,.03); box-shadow:none;">
+                <div class="pad">
+                  <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">What works</h4>
+                  <ul class="list">
+                    <li>Stable sensor polling</li>
+                    <li>Status shown clearly</li>
+                    <li>Threshold-based alerts</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card col-4" style="background:rgba(255,255,255,.03); box-shadow:none;">
+                <div class="pad">
+                  <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Limitations</h4>
+                  <ul class="list">
+                    <li>Calibration needed for precision</li>
+                    <li>Prototype enclosure not final</li>
+                    <li>Limited long-term dataset</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card col-4" style="background:rgba(255,255,255,.03); box-shadow:none;">
+                <div class="pad">
+                  <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Next steps</h4>
+                  <ul class="list">
+                    <li>Data logging (SD/cloud)</li>
+                    <li>Web/mobile dashboard</li>
+                    <li>More sensors (pH/CO₂)</li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <div class="card col-4" style="background:rgba(255,255,255,.03); box-shadow:none;">
-              <div class="pad">
-                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Limitations</h4>
-                <ul class="list">
-                  <li>Need calibration for precision</li>
-                  <li>Prototype-level enclosure</li>
-                  <li>Limited long-term dataset</li>
-                </ul>
-              </div>
-            </div>
-            <div class="card col-4" style="background:rgba(255,255,255,.03); box-shadow:none;">
-              <div class="pad">
-                <h4 class="sectionTitle" style="font-size:16px;margin:0 0 6px;">Next steps</h4>
-                <ul class="list">
-                  <li>Data logging (SD / cloud)</li>
-                  <li>Mobile/web dashboard</li>
-                  <li>More sensors (pH, etc.)</li>
-                </ul>
-              </div>
+
+            <div class="divider"></div>
+            <div class="ctaRow">
+              <a class="btn primary" href="#overview">Back to top</a>
+              <a class="btn" href="#hardware">Add photos</a>
+              <a class="btn" href="#files">Repository files</a>
             </div>
           </div>
-        </div>
-     </section>
-
-    <!-- TIMELINE -->
-    <section class="grid" id="timeline">
-      <div class="card col-12">
-        <div class="pad">
-          <h3 class="sectionTitle">Timeline</h3>
-          <p class="small">A clear timeline improves the perceived quality of the project.</p>
-          <div class="divider"></div>
-          <table class="table" aria-label="Timeline table">
-            <thead>
-              <tr><th>Week</th><th>Task</th><th>Output</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><b>1</b></td><td class="muted">Problem definition + requirements</td><td class="muted">Scope, contradictions, metrics</td></tr>
-              <tr><td><b>2</b></td><td class="muted">Hardware selection + wiring</td><td class="muted">Prototype assembled</td></tr>
-              <tr><td><b>3</b></td><td class="muted">Software logic + testing</td><td class="muted">Stable readings + status output</td></tr>
-              <tr><td><b>4</b></td><td class="muted">Documentation + ROI/value justification</td><td class="muted">Presentation website + report-ready</td></tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </section>
 
     <!-- FILES -->
-    <section class="grid" id="files">
-      <div class="card col-12">
-        <div class="pad">
-          <h3 class="sectionTitle">Repository files</h3>
-          <p class="small">
-            Recommended structure (you can create these folders in GitHub):
-          </p>
-          <div class="divider"></div>
-          <ul class="list">
-            <li><code class="inline">index.html</code> — this website</li>
-            <li><code class="inline">assets/</code> — photos (<code class="inline">photo1.jpg</code>, <code class="inline">photo2.jpg</code>, <code class="inline">photo3.jpg</code>)</li>
-            <li><code class="inline">src/</code> — Arduino code / sketches</li>
-            <li><code class="inline">docs/</code> — reports / PDFs / diagrams</li>
-            <li><code class="inline">README.md</code> — quick summary + how to run</li>
-          </ul>
+    <section class="section" id="files">
+      <div class="grid">
+        <div class="card col-12">
+          <div class="pad">
+            <h3 class="sectionTitle">Repository files</h3>
+            <p class="small">Recommended structure for a clean submission:</p>
+            <div class="divider"></div>
 
-          <div class="divider"></div>
+            <table class="table" aria-label="Repository structure">
+              <tbody>
+                <tr><th>index.html</th><td>This presentation website</td></tr>
+                <tr><th>assets/</th><td>Photos (prototype, wiring, display)</td></tr>
+                <tr><th>src/</th><td>Arduino code / sketches</td></tr>
+                <tr><th>docs/</th><td>Report PDF, diagrams, pinout</td></tr>
+                <tr><th>README.md</th><td>Short project description + how to run</td></tr>
+              </tbody>
+            </table>
 
-          <div class="ctaRow">
-            <a class="btn primary" href="#overview">Back to top</a>
-            <a class="btn" href="#hardware">Add photos</a>
-            <a class="btn" href="#software">Link code</a>
+            <div class="divider"></div>
+            <p class="small">
+              Tip: add a <b>PDF report</b> into <code class="chip" style="border-radius:10px">docs/</code> and link it here when ready.
+            </p>
           </div>
-
-          <p class="small" style="margin-top:10px;">
-            Want it “A+ level”? We can add: a pinout table, block diagram, and a short executive summary for the teacher.
-          </p>
         </div>
       </div>
     </section>
 
     <div class="footer">
-      SmartPlantMonitor • ISMA • Systems Theory and System Analysis • GitHub Pages
+      SmartPlantMonitor • Robotics • Group 4232 • Nikita Petkuns & Anastasija Vostrikova • GitHub Pages
     </div>
   </main>
 </body>
